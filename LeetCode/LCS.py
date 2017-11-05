@@ -75,8 +75,52 @@ class CS:
             max_str = s1[last_locate-max_len:last_locate]
             return max_len, max_str
     @staticmethod
-    def Manacher(s1):
-        pass
+    def Manacher(s):
+        N = len(s)
+        if N == 1:
+            return s
+        L = []
+        for i in range(N):
+            if i == 0:
+                L.append('#')
+            L.append(s[i])
+            if i == N - 1:
+                L.append('#')
+            else:
+                L.append('#')
+        NN = len(L)
+        id = 0
+        mx = 0
+        P = [0] * NN
+        P[0] = 1
+        P[NN - 1] = 1
+        for i in range(1, NN - 1):
+            if mx > i:
+                P[i] = min([P[2 * id - i], mx - i])
+            else:
+                P[i] = 1
+            k = 1
+            while i - P[i] - k + 1 >= 0 and i + P[i] + k - 1 <= NN - 1:
+                if L[i - P[i] - k + 1] == L[i + P[i] + k - 1]:
+                    P[i] += 1
+                else:
+                    break
+            if P[i] + i > mx:
+                mx = P[i] + i
+                id = i
+        mx = max(P)
+        id = P.index(mx)
+        s = ''
+        for i in range(mx):
+            si = L[id + i]
+            if si == "#":
+                pass
+            else:
+                if i == 0:
+                    s = s + si
+                else:
+                    s = si + s + si
+        return s
 
     @staticmethod
     def Kmp():
